@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,12 +14,20 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] float _rotationTorque = 1f;
     [SerializeField] float _acceleration = 1f;
     [SerializeField] float propBubbleRate = 30f;
+    [SerializeField] float _descendRate = 0.1f;
+    [SerializeField] float _ascendRate = 0.2f;
 
     //state
     Vector3 _vectorToMousePosition;
     float _headingDelta;
     float _headingDeltaFactor;
     [SerializeField] float _propulsionFactor;
+
+    [SerializeField] float _depthFactor = 0;
+    public float DepthFactor => _depthFactor;
+    public float DeltaFactor => GetDeltaFactor();
+
+
 
     private void Awake()
     {
@@ -39,7 +48,18 @@ public class MovementHandler : MonoBehaviour
         {
             _psem.rateOverTime = 0;
         }
+
+        if (Input.mouseScrollDelta.y < -Mathf.Epsilon)
+        {
+            Descend();
+        }
+        else if (Input.mouseScrollDelta.y > Mathf.Epsilon)
+        {
+            Ascend();
+        }
     }
+
+
 
     private void SteerTowardsMouse()
     {
@@ -60,4 +80,22 @@ public class MovementHandler : MonoBehaviour
         _psem.rateOverTime = propBubbleRate * _propulsionFactor;
         _rb.AddForce(transform.up * _acceleration * _propulsionFactor, ForceMode2D.Force);
     }
+
+    private void Descend()
+    {
+        _depthFactor -= _descendRate;
+        _depthFactor = Mathf.Clamp01(_depthFactor);
+    }
+
+    private void Ascend()
+    {
+        _depthFactor += _ascendRate;
+        _depthFactor = Mathf.Clamp01(_depthFactor);
+    }
+
+    private float GetDeltaFactor()
+    {
+        return (TerrainController.Instance.GetSeabedDepthFactorAtPoint(transform.position) - _depthFactor);
+    }
+
 }

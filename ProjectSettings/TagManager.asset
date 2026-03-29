@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: DepthHexMap
+    uniqueID: 1771103899
+    locked: 0
+  - name: Actors
+    uniqueID: 3281079367
+    locked: 0
+  - name: WorldUI
+    uniqueID: 1182043613
+    locked: 0
