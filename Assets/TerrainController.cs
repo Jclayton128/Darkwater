@@ -25,8 +25,10 @@ public class TerrainController : MonoBehaviour
 
     //state
     System.Random _rnd;
-    float _xOffset;
-    float _yOffset;
+
+    [SerializeField] float _xOffset;
+
+    [SerializeField] float _yOffset;
     List<DepthHexTileDriver> _depthTiles = new List<DepthHexTileDriver>();
 
     private void Awake()
@@ -43,8 +45,8 @@ public class TerrainController : MonoBehaviour
     private void CreateTerrain()
     {
         _rnd = new System.Random();
-        _xOffset = (float)_rnd.NextDouble();
-        _yOffset = (float)_rnd.NextDouble();
+        _xOffset = (float)_rnd.NextDouble() * 100f;
+        _yOffset = (float)_rnd.NextDouble() * -234f;
     }
 
     public void CreateHexMapAroundPlayer()
