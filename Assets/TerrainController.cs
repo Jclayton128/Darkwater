@@ -105,11 +105,11 @@ public class TerrainController : MonoBehaviour
 
     private void Update()
     {
-        if (ActorController.Instance.Player)
-        {
-            _hexMap.transform.position = ActorController.Instance.Player.transform.position + (Vector3)_submarineOffset;
-            UpdateAllTileDepths(ActorController.Instance.Player.DepthFactor);
-        }
+        //if (ActorController.Instance.Player)
+        //{
+        //    _hexMap.transform.position = ActorController.Instance.Player.transform.position + (Vector3)_submarineOffset;
+        //    UpdateAllTileDepths(ActorController.Instance.Player.DepthFactor);
+        //}
 
     }
 

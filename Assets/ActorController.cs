@@ -29,6 +29,6 @@ public class ActorController : MonoBehaviour
         var player = Instantiate(_playerPrefab);
         Player = player;
         CameraController.Instance.SetCameraToFollowTarget(player.transform);
-        TerrainController.Instance.CreateHexMapAroundPlayer();
+        //TerrainController.Instance.CreateHexMapAroundPlayer();
     }
 }

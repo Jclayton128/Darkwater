@@ -24,8 +24,8 @@ public class UIController : MonoBehaviour
         if (ActorController.Instance.Player)
         {
             _seabedDepthTMP.text = "Seabed: " + TerrainController.Instance.GetSeabedDepthFactorAtPoint(ActorController.Instance.Player.transform.position).ToString();
-            _playerDepthTMP.text = "Player: " + ActorController.Instance.Player.DepthFactor.ToString();
-            _distanceToBottomTMP.text = "Delta: " + ActorController.Instance.Player.DeltaFactor.ToString();
+            _playerDepthTMP.text = "Depth: " + ActorController.Instance.Player.DepthLevel;
+            //_distanceToBottomTMP.text = "Delta: " + ActorController.Instance.Player.DeltaFactor.ToString();
         }
     }
 }
