@@ -49,6 +49,7 @@ MonoBehaviour:
   _rb: {fileID: 1156738208635391347}
   _propParticles_light: {fileID: 6313467699399927015}
   _propParticles_dark: {fileID: 865092068127140676}
+  _bowParticles: {fileID: 5318365035822009204}
   _bodySR: {fileID: 8150988057774639327}
   _outlineSR: {fileID: 8146724415784781818}
   _rotationTorque: 0.6
@@ -62,6 +63,7 @@ MonoBehaviour:
   _deepDiveColor: {r: 0.03333334, g: 0.06666667, b: 0.1, a: 1}
   _regularBorderColor: {r: 0, g: 0, b: 0, a: 1}
   _dangerBorderColor: {r: 1, g: 0, b: 0, a: 1}
+  _bowParticleRate: 200
   _propulsionFactor: 0
 --- !u!50 &1156738208635391347
 Rigidbody2D:
@@ -10855,7 +10857,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 30
+      scalar: 0
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -11542,7 +11544,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -0.2
+      scalar: -0.1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -13219,11 +13221,11 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   SizeBySpeedModule:
-    enabled: 0
+    enabled: 1
     curve:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -13231,21 +13233,21 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 0
-          outSlope: 1
+          inSlope: 2
+          outSlope: 2
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 1
+          inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4

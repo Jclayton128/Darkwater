@@ -11,8 +11,10 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] Rigidbody2D _rb = null;
     [SerializeField] ParticleSystem _propParticles_light = null;
     [SerializeField] ParticleSystem _propParticles_dark = null;
+    [SerializeField] ParticleSystem _bowParticles = null;
     ParticleSystem.EmissionModule _psem_light;
     ParticleSystem.EmissionModule _psem_dark;
+    ParticleSystem.EmissionModule _psem_bow;
 
     [SerializeField] SpriteRenderer _bodySR = null;
     [SerializeField] SpriteRenderer _outlineSR = null;
@@ -34,6 +36,9 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] Color _regularBorderColor = Color.black;
     [SerializeField] Color _dangerBorderColor = Color.red;
 
+    [Header("Particles")]
+    [SerializeField] int _bowParticleRate = 10;
+
     //state
     Vector3 _vectorToMousePosition;
     float _headingDelta;
@@ -48,6 +53,7 @@ public class MovementHandler : MonoBehaviour
     {
         _psem_light = _propParticles_light.emission;
         _psem_dark = _propParticles_dark.emission;
+        _psem_bow = _bowParticles.emission;
         _depthLevel = DepthLevels.Periscope;
         SetDepthVisuals();
     }
@@ -57,7 +63,17 @@ public class MovementHandler : MonoBehaviour
         _vectorToMousePosition = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
         _headingDelta = Vector3.SignedAngle(transform.up, _vectorToMousePosition, transform.forward);
 
-        UpdateSteerTowardsMouse();
+        if (_depthLevel == DepthLevels.Surface)
+        {
+            _psem_bow.rateOverDistance = _rb.velocity.magnitude * _bowParticleRate;
+        }
+        else
+        {
+            _psem_bow.rateOverDistance = 0;
+        }
+
+
+            UpdateSteerTowardsMouse();
         UpdateThrust();
 
         if (Input.GetKeyDown(KeyCode.W))
