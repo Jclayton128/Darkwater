@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class MovementHandler : MonoBehaviour
@@ -26,6 +27,7 @@ public class MovementHandler : MonoBehaviour
     [SerializeField] float propBubbleRate = 30f;
     [SerializeField] float _depthChangeRate = 0.25f;
     [SerializeField] float _thrustChangeRate = 0.25f;
+    [SerializeField] float _depthChangeTime = 1f;
 
     [Header("Visuals")]
 
@@ -47,7 +49,10 @@ public class MovementHandler : MonoBehaviour
 
     DepthLevels _depthLevel = DepthLevels.Periscope;
     public DepthLevels DepthLevel => _depthLevel;
-
+    Tween _depthChangeTween;
+    Tween _depthChangeTween_Border;
+    [SerializeField] float _commandedDepth;
+    [SerializeField] float _actualDepth;
 
     private void Awake()
     {
@@ -55,6 +60,8 @@ public class MovementHandler : MonoBehaviour
         _psem_dark = _propParticles_dark.emission;
         _psem_bow = _bowParticles.emission;
         _depthLevel = DepthLevels.Periscope;
+        _commandedDepth = 1f;
+        _actualDepth = 1f;
         SetDepthVisuals();
     }
 
@@ -87,20 +94,36 @@ public class MovementHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            Descend();
+            CommandDescent();
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
-            Ascend();
+            CommandAscent();
         }
+
+        UpdateDepth();
     }
+
+
 
     private void UpdateThrust()
     {
         //_propulsionFactor = Mathf.Lerp(0.2f, 1f, (1 - _headingDeltaFactor));
         _psem_light.rateOverTime = propBubbleRate * _propulsionFactor;
+
         _psem_dark.rateOverTime = propBubbleRate * _propulsionFactor;
         _rb.AddForce(transform.up * _acceleration * _propulsionFactor, ForceMode2D.Force);
+    }
+
+    private void UpdateDepth()
+    {
+        if (Mathf.Abs(_actualDepth - _commandedDepth) > Mathf.Epsilon)
+        {
+            _actualDepth = Mathf.MoveTowards(_actualDepth, _commandedDepth, _depthChangeTime * Time.deltaTime);
+        }
+
+        _depthLevel = (DepthLevels)Mathf.RoundToInt(_actualDepth);
+        SetDepthVisuals();
     }
 
     private void UpdateSteerTowardsMouse()
@@ -128,30 +151,32 @@ public class MovementHandler : MonoBehaviour
         _propulsionFactor = Mathf.Clamp01(_propulsionFactor);
     }
 
-    private void Descend()
+    private void CommandDescent()
     {
-        if (_depthLevel == DepthLevels.Extreme)
+        if (_commandedDepth >= (float)DepthLevels.Extreme)
         {
             //do nothing
         }
         else
         {
-            _depthLevel += 1;
-            SetDepthVisuals();
+            _commandedDepth += 1f;
+            //_depthLevel += 1;
+            //SetDepthVisuals();
         }
 
     }
 
-    private void Ascend()
+    private void CommandAscent()
     {
-        if (_depthLevel == DepthLevels.Surface)
+        if (_commandedDepth <= (float)DepthLevels.Surface)
         {
             //do nothing
         }
         else
         {
-            _depthLevel -= 1;
-            SetDepthVisuals();
+            _commandedDepth -= 1f;
+            //_depthLevel -= 1;
+            //SetDepthVisuals();
         }
     }
 
@@ -160,28 +185,38 @@ public class MovementHandler : MonoBehaviour
         switch (_depthLevel)
         {
             case DepthLevels.Surface:
-                _bodySR.color = _surfaceColor;
+                _depthChangeTween.Kill();
+                _depthChangeTween = _bodySR.DOColor(_surfaceColor, _depthChangeTime);
+
                 _outlineSR.color = _regularBorderColor;
                 break;
 
             case DepthLevels.Periscope:
-                _bodySR.color = _periscopeColor;
+                _depthChangeTween.Kill();
+                _depthChangeTween = _bodySR.DOColor(_periscopeColor, _depthChangeTime);
                 _outlineSR.color = _regularBorderColor;
                 break;
 
             case DepthLevels.Shallow:
-                _bodySR.color = _shallowDiveColor;
+                _depthChangeTween.Kill();
+                _depthChangeTween = _bodySR.DOColor(_shallowDiveColor, _depthChangeTime);
                 _outlineSR.color = _regularBorderColor;
                 break;
 
             case DepthLevels.Deep:
-                _bodySR.color = _deepDiveColor;
-                _outlineSR.color = _regularBorderColor;
+                _depthChangeTween.Kill();
+                _depthChangeTween = _bodySR.DOColor(_deepDiveColor, _depthChangeTime);
+
+                _depthChangeTween_Border.Kill();
+                _depthChangeTween_Border = _outlineSR.DOColor(_regularBorderColor, _depthChangeTime);
                 break;
 
             case DepthLevels.Extreme:
-                _bodySR.color = _deepDiveColor;
-                _outlineSR.color = _dangerBorderColor;
+                _depthChangeTween.Kill();
+                _depthChangeTween = _bodySR.DOColor(_deepDiveColor, _depthChangeTime);
+
+                _depthChangeTween_Border.Kill();
+                _depthChangeTween_Border = _outlineSR.DOColor(_dangerBorderColor, _depthChangeTime);
                 break;
 
 
