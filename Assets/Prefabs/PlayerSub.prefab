@@ -57,6 +57,7 @@ MonoBehaviour:
   propBubbleRate: 30
   _depthChangeRate: 0.25
   _thrustChangeRate: 0.2
+  _depthChangeTime: 1
   _surfaceColor: {r: 0.47058827, g: 0.54901963, b: 0.5019608, a: 1}
   _periscopeColor: {r: 0.16666669, g: 0.33333334, b: 0.5, a: 1}
   _shallowDiveColor: {r: 0.06666667, g: 0.13333334, b: 0.20000002, a: 1}
@@ -65,6 +66,8 @@ MonoBehaviour:
   _dangerBorderColor: {r: 1, g: 0, b: 0, a: 1}
   _bowParticleRate: 200
   _propulsionFactor: 0
+  _commandedDepth: 0
+  _actualDepth: 0
 --- !u!50 &1156738208635391347
 Rigidbody2D:
   serializedVersion: 4
@@ -10274,8 +10277,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.1
-      minScalar: 0.05
+      scalar: 0.5
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -10963,7 +10966,7 @@ ParticleSystem:
     m_BurstCount: 0
     m_Bursts: []
   SizeModule:
-    enabled: 1
+    enabled: 0
     curve:
       serializedVersion: 2
       minMaxState: 1
@@ -11487,7 +11490,7 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -11544,7 +11547,7 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -0.1
+      scalar: -0.02
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -14852,7 +14855,7 @@ Transform:
   m_GameObject: {fileID: 8531610341298832367}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
